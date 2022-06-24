@@ -99,12 +99,12 @@ input[type="checkbox"] {
 }
 
 a.locationList {
-    margin: 0 5px;
-    padding: 20px;
-    font-size: 20px;
-    font-weight: 200;
-    color: #00204a;
-    letter-spacing: 3px;
+  margin: 0 5px;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 200;
+  color: #00204a;
+  letter-spacing: 3px;
 }
 
 p {
@@ -267,7 +267,7 @@ input.itemsList::placeholder {
   
 }
 
-.fa-warehouse {
+.fa-blender {
   font-size: 2rem;
   color: #ffb9b5;
 }
