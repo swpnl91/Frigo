@@ -1,11 +1,14 @@
 <%- include("partials/header"); %>
 
+  <div class="welcome">
+    <h1>Welcome to FriGo!</h1>
+  </div>
 
-
-
-
-
-
-
+  <div class="searchBox">
+    <form class="item" action="/" method="post">
+      <input class="searchInput" type="text" name="listName" placeholder="Search/Create a Shopping List">
+      <button class="searchButton" type="submit" type="submit"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+    </form>
+  </div>
 
 <%- include("partials/footer"); %>
