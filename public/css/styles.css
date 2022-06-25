@@ -192,7 +192,7 @@ button.locationDelete {
 
 .searchInput:focus {
   outline: none;
-  box-shadow: inset 0 -3px 0 0 #f795d6;
+  box-shadow: inset 0 -3px 0 0 #BE4548;
 }
 
 .searchInput::placeholder {
