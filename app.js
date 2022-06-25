@@ -14,6 +14,7 @@ app.use(express.static("public"));
 
 mongoose.connect("mongodb://localhost:27017/inventoryDB", {useNewUrlParser: true});
 
+
 // Creating schemas and collections for DB
 
 const itemsSchema = new mongoose.Schema({
@@ -37,6 +38,9 @@ const pantrySchema = new mongoose.Schema({
 
 const Pantry = mongoose.model("Pantry", pantrySchema);
 
+
+// ROUTES
+
 app.get("/", function(req, res) {
   res.render("home");
 });
@@ -46,7 +50,39 @@ app.get("/", function(req, res) {
 
 
 app.post("/", function(req, res) {
-
+  
+  if(req.body.newItem === "" || req.body.listName === "") {    // This condition accounts for when the input field is left blank and the form is submitted.
+    res.render("error");
+  } else {
+    if(req.body.newItem === undefined) {     // Got to be careful while checking whether something equals null/undefined.
+      if(req.body.listName.trim() === "") {    // This condition accounts for when the input field has only spaces and the form is submitted.
+        res.render("error");
+      } else {
+        const customListName = req.body.listName; // listName comes from home.ejs
+        res.redirect("/" + customListName); 
+      } 
+    } 
+    if(req.body.listName === undefined) {
+      if(req.body.newItem.trim() === "") {
+        res.render("error");
+      } else {
+        const itemName = req.body.newItem;     // newItem comes from list.ejs 3rd <form>
+        const listName = req.body.list;   // list comes from list.ejs 3rd <form>
+        const item = new Item ({
+          name: itemName
+        });
+        List.findOne({name: listName}, function(err, foundList){
+          if(err) {
+            console.log(err);
+          } else {
+            foundList.items.push(item);
+            foundList.save();
+            res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+          }
+        });
+      }
+    }
+  }
 });
 
 
