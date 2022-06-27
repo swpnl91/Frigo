@@ -1,0 +1,31 @@
+<%- include("partials/header"); -%>
+
+  <div class="box" id="heading">
+    <h1> To-buy Lists </h1>
+  </div>
+
+  <div class="box">
+      
+    <% listsArray.forEach(function(list) { %>
+
+      <div class="item">   
+          <div class="itemName">           
+            <form action="/delete" method="post">
+              <button class="locationDelete" type="submit" class="edit" name="listToDelete" value="<%=  list  %>"><i class="fa-solid fa-trash-can"></i></button>
+              <input type="hidden" name="itemId" value=""></input>
+            </form>        
+            <a class="locationList" href="/<%=  list  %>"><i class="fa-solid fa-list-ol"></i> <%=  list  %></a>
+          </div>
+      </div>
+    
+    <% }) %>
+  
+  </div>
+
+  <div class="locationAdd">
+    <form class="addLocation" action="/" method="GET">
+      <button class="addLo" type="submit"><i class="fa-solid fa-plus"></i></button>
+    </form>
+  </div>
+
+<%- include("partials/footer"); -%>
