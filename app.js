@@ -140,6 +140,44 @@ app.post("/", function(req, res) {
 });
 
 
+app.post("/delete", function(req, res) {
+  const checkedItemID = req.body.checkbox;          // checkbox comes from list.ejs 2nd <form>
+  const listName = req.body.listDelete;     // listDelete comes from list.ejs 2nd <form>
+
+  const listToDelete = req.body.listToDelete;   // listToDelete comes from locations.ejs 1st <form>
+
+  if(listToDelete) {    // This condition handles if there is a request to delete a list from a bunch of lists.
+    List.deleteOne({name: listToDelete}, function(err) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("Successfully deleted");
+        List.find({}, function(err, foundLists) {   // This part renders the whole bunch of lists
+          if(err) {
+            console.log(err);
+          } else {
+            let array = [];
+            for(const list of foundLists) {
+              array.push(list.name);
+            }
+            const distinctLists = [...new Set(array)];   // To remove the multiple entries that get created.
+            res.render("lists", {listsArray: distinctLists});
+          }
+        });
+      }
+    });
+  } else {
+    // This handles the deletion of a particular item in a given list
+    List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemID}}}, function(err, foundList) {
+      if (!err) {
+        res.redirect("/" + listName);
+      } else {
+        console.log(err);
+      }
+    });
+  }
+});
+
 
 
 
