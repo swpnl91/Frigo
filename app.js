@@ -46,6 +46,19 @@ app.get("/", function(req, res) {
 });
 
 
+// ROUTE made just as a workaround to the problem MongoDB has while adding the very first list to the DB. 
+app.get("/limbo/:customListName", function(req, res) {
+  const customListName = req.params.customListName;
+  List.find({}, function(err, foundLists) {
+    if(foundLists.length > 0) {    // Checks whether the array has any item/first entry has been created or not in the DB.  
+      res.redirect("/" + customListName);
+    } else if(foundLists.length === 0) {
+      res.redirect("/limbo/" + customListName);   // If not then it redirects to itself and keeps on checking and in the process buys time for MongoDB.
+    }
+  })
+});
+
+
 app.get("/:customListName", function(req, res) {
   
   const customListName = _.capitalize(req.params.customListName);
