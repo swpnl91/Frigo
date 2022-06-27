@@ -1,0 +1,27 @@
+<%- include('partials/header'); %>
+
+  <div>
+    <h3>Old Value</h3>
+    <h2>⬇</h2>
+  </div>
+
+  <div class="box oldValue" id="heading">
+    <h1 class="oldValue"> <%= oldItem %> </h1>
+  </div>
+
+  <div>
+    <h3>New Value</h3>
+    <h2>⬇</h2>
+  </div>
+
+  <div class="box">
+
+      <form class="item" action="/<%= listName %>" method="post">
+        <input class="itemsList" type="text" name="newValue" placeholder="Add New Value" autocomplete="off">
+        <button class="add" type="submit" name="oldValue" value="<%= oldItem %>">✓</button>
+        <input type="hidden" name="itemId" value="<%= itemId %>"></input>
+      </form>
+
+  </div>
+
+<%- include('partials/footer'); %>
