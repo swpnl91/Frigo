@@ -144,7 +144,7 @@ app.post("/delete", function(req, res) {
   const checkedItemID = req.body.checkbox;          // checkbox comes from list.ejs 2nd <form>
   const listName = req.body.listDelete;     // listDelete comes from list.ejs 2nd <form>
 
-  const listToDelete = req.body.listToDelete;   // listToDelete comes from locations.ejs 1st <form>
+  const listToDelete = req.body.listToDelete;   // listToDelete comes from lists.ejs 1st <form>
 
   if(listToDelete) {    // This condition handles if there is a request to delete a list from a bunch of lists.
     List.deleteOne({name: listToDelete}, function(err) {
@@ -176,6 +176,14 @@ app.post("/delete", function(req, res) {
       }
     });
   }
+});
+
+app.post("/edit/:itemName", function(req, res) {
+  const name = req.params.itemName;   // Comes from the url.
+  const list = req.body.editedList;  // Comes from list.ejs 1st <form>
+  const itemId = req.body.itemId;  // Comes from list.ejs 1st <form>
+
+  res.render('edit', {oldItem: name, listName: list, itemId: itemId});
 });
 
 
