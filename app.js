@@ -186,6 +186,31 @@ app.post("/edit/:itemName", function(req, res) {
   res.render('edit', {oldItem: name, listName: list, itemId: itemId});
 });
 
+app.post("/:listName", function(req, res) {
+  const listName = req.params.listName;   // Comes from the url.
+  const newItem = req.body.newValue;   // Comes from edit.ejs
+  const oldItem = req.body.oldValue;   // Comes from edit.ejs
+  const itemId = req.body.itemId;      // Comes from edit.ejs
+
+  List.findOne({name: listName}, function(err, foundItem) {  //  foundItem is the matched object
+    if(err) {
+      console.log(err);
+    } else {
+      const id = foundItem._id;  // list id
+      const query = {"_id": id,
+        "items._id": itemId
+      }
+      List.findOneAndUpdate(query, {$set: {"items.$.name": newItem }}, function(err, found) {    // 'items.$.name' checks the name property of objects inside the 'items' array.
+        if(err) {
+          console.log(err);
+        } else {
+          res.redirect(`/${listName}`);
+        }
+      }); 
+    }
+  });
+});
+
 
 
 
