@@ -46,6 +46,47 @@ app.get("/", function(req, res) {
 });
 
 
+app.get("/:customListName", function(req, res) {
+  
+  const customListName = _.capitalize(req.params.customListName);
+
+  if(customListName === "Lists") {     // This condition handles the rendering of all the lists.
+    List.find({}, function(err, foundLists) {   // foundLists is an array of objects. This query returns all the list objects.
+      if(err) {
+        console.log(err);
+      } else {
+        const array = [];
+        for(const list of foundLists) {
+          array.push(list.name);
+        }
+        const distinctLists = [...new Set(array)];   // ES6-specific way of removing duplicate items in an array.
+        res.render("lists", {listsArray: distinctLists});
+      }
+    });
+  } else {       // The else part handles the saving of the list
+    List.findOne({name: customListName}, function(err, foundList) {   // foundList gives you a matched object with 'name' & 'items' as properties.
+      if(err) {
+        console.log(err);
+      } else {
+        if(foundList === null) {      // This condition accounts for when the list doesn't exist. Got to be careful while checking whether something equals null/undefined.
+          
+          /////// MongoDB takes a lot of time to create only the first entry during which multiple...
+          /////// ... redirects happen and this specific code is run, creating multiple entries.
+          
+          const list = new List({
+            name: customListName,
+            items: defaultItems
+          });
+          list.save();
+          res.redirect("/limbo/" + customListName);
+
+        } else {
+          res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+        }
+      }
+    });
+  }
+});
 
 
 
