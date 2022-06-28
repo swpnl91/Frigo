@@ -105,6 +105,43 @@ app.get("/:customListName", function(req, res) {
 
 
 
+app.post("/add/:itemName", function(req, res) {
+  const name = req.params.itemName;
+  const list = req.body.listTitle;
+  const itemId = req.body.itemId;  
+
+  Pantry.find({}, function(err, foundPantry) {
+    if(err) {
+      console.log(err);
+    } else {
+      if(foundPantry.length === 0) {    // foundPantry is an array of objects
+        const pantry = new Pantry({
+          name: name
+        });
+        pantry.save();
+        res.redirect(307, "/limbo/pantry/" + name);    // 307 preserves the method - 'post' in this case as you cannot redirect to post from get 
+      } else {
+        if(foundPantry.length > 0) {
+          let arr = [];
+          foundPantry.forEach(function(item) {
+            arr.push(item.name);
+          })
+          if(arr.length === 1 && arr.includes(name)) {
+            res.redirect("/pantry");
+          } else if(arr.includes(name)) {
+            res.render("error");  ///////////////// create a new error page
+          } else {
+            const pantry = new Pantry({
+              name: name
+            });
+            pantry.save();
+            res.redirect("/pantry");
+          }
+        }
+      }
+    }
+  });
+});
 
 
 app.post("/", function(req, res) {
