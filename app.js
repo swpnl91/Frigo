@@ -45,7 +45,10 @@ app.get("/", function(req, res) {
   res.render("home");
 });
 
-
+app.get("/pantry", function(req, res) {
+  res.send("<h1>done</h1>");
+  
+});
 
 
 // ROUTE made just as a workaround to the problem MongoDB has while adding the very first list to the DB. 
