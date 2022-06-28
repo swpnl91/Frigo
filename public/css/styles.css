@@ -71,6 +71,10 @@ h3 {
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
 }
 
+.pantry {
+  margin: 1px 10px 1px 100px;
+}
+
 .item {
   min-height: 70px;
   display: flex;
@@ -132,6 +136,16 @@ button.add {
   font-size: 2.5rem;
   border-width: 0;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+
+button.recipeBtn {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border-color: transparent;
+  font-size: 15px;
+  border-width: 0;
+  margin: 5px 15px;
 }
 
 button.editBtn {
@@ -282,6 +296,11 @@ input.itemsList::placeholder {
   font-size: 10rem;
   color: #b4cbf1;
   margin-left: 550px;
+}
+
+.fa-burger {
+  font-size: xx-large;
+  color: #BE4548;
 }
 
 .error-text {

@@ -1,7 +1,12 @@
 <%- include('partials/header'); %>
 
   <div class="box" id="heading">
-    <h1> Pantry </h1>
+    <form action="/recipes" method="get">
+      <div class="itemName">
+        <h1 class="pantry"> Pantry </h1>
+        <button class="recipeBtn" type="submit"><i class="fa-solid fa-burger"></i></button>
+      </div>
+    </form>
   </div>
   
   <div class="box">
