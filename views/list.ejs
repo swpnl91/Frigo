@@ -12,17 +12,33 @@
       <div class="item">
 
         <form action="/edit/<%= newListItem.name %>" method="post">
-              <button class="editBtn" type="submit" class="edit" name="editedList" value="<%= listTitle %>"><i class="fa-solid fa-pen-to-square"></i></button>
-              <input type="hidden" name="itemId" value="<%= newListItem._id %>"></input>
+          <button class="editBtn" type="submit" class="edit" name="editedList" value="<%= listTitle %>"><i class="fa-solid fa-pen-to-square"></i></button>
+          <input type="hidden" name="itemId" value="<%= newListItem._id %>"></input>
         </form>
 
         <form action="/delete" method="post">
           <div class="itemName">
             <button type="submit" class="delete" name="checkbox" value="<%= newListItem._id %>"><i class="fa-solid fa-trash-can"></i></button>
-            <p><%=  newListItem.name  %></p>
+            <!-- <p><%=  newListItem.name  %></p> -->
           </div>
           <input type="hidden" name="listDelete" value="<%= listTitle %>"></input>
         </form>
+
+        <!-- <form action="/add" method="post">
+          <div class="item">
+            <input type="checkbox" name="pantryItem" value="<%= newListItem.name %>"></input>
+            <p><%=  newListItem.name  %></p>
+          </div>
+        </form> -->
+
+        <form action="/add/<%= newListItem.name %>" method="post">
+          <div class="itemName">
+            <button type="submit" class="editBtn" name="itemId" value="<%= newListItem._id %>"><i class="fa-solid fa-cart-arrow-down"></i></button>
+            <p><%=  newListItem.name  %></p>
+          </div>
+          <input type="hidden" name="listTitle" value="<%= listTitle %>"></input>
+        </form>
+
 
       </div>
     
