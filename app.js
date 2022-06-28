@@ -103,7 +103,20 @@ app.get("/:customListName", function(req, res) {
   }
 });
 
-
+app.post("/limbo/pantry/:itemName", function(req, res) {
+  const name = req.params.itemName;
+  Pantry.find({}, function(err, foundPantry) {
+    if(err) {
+      console.log(err);
+    } else {
+      if(foundPantry.length === 0) {
+        res.redirect(307, "/limbo/pantry/" + name);
+      } else if(foundPantry.length > 0) {
+        res.redirect(307, "/add/" + name);
+      }
+    }
+  })
+});
 
 app.post("/add/:itemName", function(req, res) {
   const name = req.params.itemName;
