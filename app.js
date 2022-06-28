@@ -46,8 +46,9 @@ app.get("/", function(req, res) {
 });
 
 app.get("/pantry", function(req, res) {
-  res.send("<h1>done</h1>");
-  
+  Pantry.find({}, function(err, foundPantry) {
+    res.render("pantry", {itemArray: foundPantry});
+  })
 });
 
 
