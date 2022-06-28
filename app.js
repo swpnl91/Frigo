@@ -47,7 +47,7 @@ app.get("/", function(req, res) {
 
 app.get("/pantry", function(req, res) {
   Pantry.find({}, function(err, foundPantry) {
-    res.render("pantry", {itemArray: foundPantry});
+    res.render("pantry", {itemsArray: foundPantry});
   })
 });
 

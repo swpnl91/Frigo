@@ -1,0 +1,19 @@
+<%- include('partials/header'); %>
+
+  <div class="box" id="heading">
+    <h1> Pantry </h1>
+  </div>
+  
+  <div class="box">
+    
+    <% itemsArray.forEach(function(item) { %>
+
+      <div class="item">
+        <p><%=  item.name  %></p>
+      </div>
+    
+    <% }) %>
+
+  </div>
+
+<%- include('partials/footer'); %>
