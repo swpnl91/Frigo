@@ -47,7 +47,11 @@ app.get("/", function(req, res) {
 
 app.get("/pantry", function(req, res) {
   Pantry.find({}, function(err, foundPantry) {
-    res.render("pantry", {itemsArray: foundPantry});
+    if(err) {
+      console.log(err);
+    } else {
+      res.render("pantry", {itemsArray: foundPantry});
+    }
   })
 });
 
@@ -197,12 +201,35 @@ app.post("/", function(req, res) {
   }
 });
 
+app.post("/deletepantry", function(req, res) {
+  const pantryItemToDelete = req.body.deletePantryItem  // deletePantryItem comes from pantry.ejs 2nd <form>
+
+  if(pantryItemToDelete) {
+    Pantry.deleteOne({name: pantryItemToDelete}, function(err, deletedItem) {
+      if (err) {
+        console.log(err);
+      } else {
+        // res.redirect("/pantry");
+        // console.log(deletedItem);
+        Pantry.find({}, function(err, foundPantry) {
+          if(err) {
+            console.log(err);
+          } else {
+            res.render("pantry", {itemsArray: foundPantry});
+          }
+        })
+      }
+    });
+  }
+});
+
 
 app.post("/delete", function(req, res) {
   const checkedItemID = req.body.checkbox;          // checkbox comes from list.ejs 2nd <form>
   const listName = req.body.listDelete;     // listDelete comes from list.ejs 2nd <form>
 
   const listToDelete = req.body.listToDelete;   // listToDelete comes from lists.ejs 1st <form>
+
 
   if(listToDelete) {    // This condition handles if there is a request to delete a list from a bunch of lists.
     List.deleteOne({name: listToDelete}, function(err) {
