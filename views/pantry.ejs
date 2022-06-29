@@ -13,10 +13,6 @@
     
     <% itemsArray.forEach(function(item) { %>
 
-      <!-- <div class="item">
-        <p><%=  item.name  %></p>
-      </div> -->
-
       <form action="/deletepantry" method="post">
         <div class="itemName">
           <button type="submit" class="deleteItem" name="deletePantryItem" value="<%= item.name %>"><i class="fa-solid fa-trash-can"></i></button>

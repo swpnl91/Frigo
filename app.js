@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -65,47 +66,56 @@ app.get("/recipes", function(req, res) {
       foundPantry.forEach(function(item) {
         recipeArray.push(item.name);
       })
+      
+      let url = "/recipes/findByIngredients?ingredients=";
+
+      for(let i = 0; i < recipeArray.length; i++) {
+        if(i === 0) {
+          if(recipeArray[i].includes(" ")) {
+            let word = recipeArray[i].split(" ");
+            url = url + word[0] + "%20" + word[1];
+          } else {
+            url = url + recipeArray[i];
+          }
+        } else {
+          if(recipeArray[i].includes(" ")) {
+            let word = recipeArray[i].split(" ");
+            url = url + "%2C%20" + word[0] + "%20" + word[1];
+          } else {
+            url = url + "%2C%20" + recipeArray[i];
+          } 
+        }
+      }
+    
+      const options = {
+        "method": "GET",
+        "hostname": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+        "port": null,
+        "path": url + "&number=6&ignorePantry=true&ranking=2",
+        "headers": {
+          "X-RapidAPI-Key": process.env.API_KEY,
+          "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+          "useQueryString": true
+        }
+      };
+
+      const request = https.request(options, function (response) {
+        const chunks = [];
+
+        response.on("data", function (chunk) {
+          chunks.push(chunk);
+        });
+
+        response.on("end", function () {
+          const body = Buffer.concat(chunks);
+          const ans = body.toString();
+          answer = JSON.parse(ans);
+          res.render("recipes", {recipesArray: answer});
+        });
+      });
+      request.end();
     }
   });
-
-  let url = "/recipes/findByIngredients?ingredients=";
-
-  for(let i = 0; i < recipeArray.length; i++) {
-    if(i === 0) {
-      url = url + recipeArray[i];
-    } else {
-      url = url + "%2C%20" + recipeArray[i]; 
-    }
-  }
-
-  const options = {
-    "method": "GET",
-    "hostname": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-    "port": null,
-    "path": url + "&number=5&ignorePantry=true&ranking=2",
-    "headers": {
-      "X-RapidAPI-Key": "7854319be9msh83aa1a4948eca3ap12961fjsnb216adbbacae",
-      "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-      "useQueryString": true
-    }
-  };
-
-  const request = https.request(options, function (response) {
-    const chunks = [];
-
-    response.on("data", function (chunk) {
-      chunks.push(chunk);
-    });
-
-    response.on("end", function () {
-      const body = Buffer.concat(chunks);
-      const ans = body.toString();
-      //console.log(body.toString());
-      answer = JSON.parse(ans);
-    });
-  });
-  request.end();
-  res.render("recipes", {});
 });
 
 
@@ -203,7 +213,7 @@ app.post("/add/:itemName", function(req, res) {
           if(arr.length === 1 && arr.includes(name)) {
             res.redirect("/pantry");
           } else if(arr.includes(name)) {
-            res.render("error");  ///////////////// create a new error page
+            res.render("existsError");
           } else {
             const pantry = new Pantry({
               name: name
@@ -253,6 +263,45 @@ app.post("/", function(req, res) {
     }
   }
 });
+
+
+app.post("/source", function(req, res) {
+  const id = req.body.recipeId;
+  let answer;
+
+  console.log(id);
+
+  const options = {
+    "method": "GET",
+    "hostname": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+    "port": null,
+    "path": "/recipes/" + id + "/information",
+    "headers": {
+      "X-RapidAPI-Key": process.env.API_KEY,
+      "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+      "useQueryString": true
+    }
+  };
+  
+  const request = https.request(options, function (response) {
+    const chunks = [];
+  
+    response.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
+  
+    response.on("end", function () {
+      const body = Buffer.concat(chunks);
+      const ans = body.toString();
+      answer = JSON.parse(ans);
+      res.redirect(answer.sourceUrl);
+    });
+  });
+  
+  request.end();
+
+});
+
 
 app.post("/deletepantry", function(req, res) {
   const pantryItemToDelete = req.body.deletePantryItem  // deletePantryItem comes from pantry.ejs 2nd <form>

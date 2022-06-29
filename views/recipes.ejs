@@ -1,0 +1,23 @@
+<%- include('partials/header'); %>
+
+<div class="box" id="heading">
+  <h1> Recipes </h1> 
+</div>
+
+<div class="box">
+    
+  <% recipesArray.forEach(function(recipe) { %>
+
+    <form action="/source" method="post">
+      <div class="itemName">
+        <button type="submit" class="deleteItem" name="recipeId" value="<%= recipe.id %>"><i class="fa-solid fa-link"></i></button>
+        <p><%=  recipe.title  %></p>
+      </div>
+    </form>
+  
+  <% }) %>
+
+</div>
+      
+
+<%- include('partials/footer'); %>
