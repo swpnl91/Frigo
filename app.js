@@ -55,6 +55,59 @@ app.get("/pantry", function(req, res) {
   })
 });
 
+app.get("/recipes", function(req, res) {
+  let recipeArray = [];
+  let answer;
+  Pantry.find({}, function(err, foundPantry) {
+    if(err) {
+      console.log(err);
+    } else {
+      foundPantry.forEach(function(item) {
+        recipeArray.push(item.name);
+      })
+    }
+  });
+
+  let url = "/recipes/findByIngredients?ingredients=";
+
+  for(let i = 0; i < recipeArray.length; i++) {
+    if(i === 0) {
+      url = url + recipeArray[i];
+    } else {
+      url = url + "%2C%20" + recipeArray[i]; 
+    }
+  }
+
+  const options = {
+    "method": "GET",
+    "hostname": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+    "port": null,
+    "path": url + "&number=5&ignorePantry=true&ranking=2",
+    "headers": {
+      "X-RapidAPI-Key": "7854319be9msh83aa1a4948eca3ap12961fjsnb216adbbacae",
+      "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+      "useQueryString": true
+    }
+  };
+
+  const request = https.request(options, function (response) {
+    const chunks = [];
+
+    response.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
+
+    response.on("end", function () {
+      const body = Buffer.concat(chunks);
+      const ans = body.toString();
+      //console.log(body.toString());
+      answer = JSON.parse(ans);
+    });
+  });
+  request.end();
+  res.render("recipes", {});
+});
+
 
 // ROUTE made just as a workaround to the problem MongoDB has while adding the very first list to the DB. 
 app.get("/limbo/:customListName", function(req, res) {
